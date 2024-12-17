@@ -93,16 +93,16 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="container bg-gray-100 mx-auto p-6 rounded-lg">
-        <div className="flex justify-between p-2 mb-8 rounded-lg">
-          <div className="flex gap-4 items-center">
+        <div className="flex flex-col md:flex-row justify-between p-4 mb-8 rounded-lg">
+          <div className="flex items-center gap-4 mb-4 md:mb-0">
             <img src={logo} width={50} alt="logo" />
-            <h1 className="text-2xl font-bold text-center">
+            <h1 className="text-md font-bold text-center md:text-left sm:text-2xl md:text-2xl">
               Task Management App
             </h1>
           </div>
           <button
             onClick={openCreateModal}
-            className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-200"
+            className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition duration-200 w-full md:w-auto"
           >
             Create Task
           </button>
