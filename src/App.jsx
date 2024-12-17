@@ -25,7 +25,7 @@ function App() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
   const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const [tasksPerPage] = useState(3); // Number of tasks per page
+  const [tasksPerPage] = useState(6); // Number of tasks per page
 
   const fetchTasks = async () => {
     const response = await getTasksAPI();
@@ -176,33 +176,69 @@ function App() {
         </div>
 
         {/* Pagination Controls */}
-        <div className="flex justify-center mt-6 space-x-4">
+        <div
+          className="flex justify-between items-center gap-x-1 mt-6"
+          aria-label="Pagination"
+        >
           <button
-            onClick={() => handlePageChange(currentPage - 1)}
+            type="button"
             disabled={currentPage === 1}
-            className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 transition duration-200"
+            onClick={() => handlePageChange(currentPage - 1)}
+            className="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-black hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none"
+            aria-label="Previous"
           >
-            Previous
-          </button>
-          {[...Array(totalPages)].map((_, index) => (
-            <button
-              key={index}
-              onClick={() => handlePageChange(index + 1)}
-              className={`px-4 py-2 rounded-md ${
-                currentPage === index + 1
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-300 hover:bg-gray-400"
-              } transition duration-200`}
+            <svg
+              className="text-black shrink-0 size-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              width={24}
+              height={24}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              {index + 1}
-            </button>
-          ))}
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+            <span aria-hidden="true" className="text-black hidden sm:block">
+              Previous
+            </span>
+          </button>
+          <div className="flex items-center gap-x-1">
+            <span className="min-h-[38px] min-w-[38px] flex justify-center items-center border border-gray-300 text-black py-2 px-3 text-sm rounded-lg">
+              {currentPage}
+            </span>
+            <span className="min-h-[38px] flex justify-center items-center text-gray-500 py-2 px-1.5 text-sm dark:text-neutral-500">
+              of
+            </span>
+            <span className="min-h-[38px] flex justify-center items-center text-black py-2 px-1.5 text-sm">
+              {totalPages}
+            </span>
+          </div>
           <button
-            onClick={() => handlePageChange(currentPage + 1)}
+            type="button"
             disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400 transition duration-200"
+            onClick={() => handlePageChange(currentPage + 1)}
+            className="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-black hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none"
           >
-            Next
+            <span aria-hidden="true" className="hidden sm:block">
+              Next
+            </span>
+            <svg
+              className="shrink-0 size-3.5"
+              xmlns="http://www.w3.org/2000/svg"
+              width={24}
+              height={24}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
           </button>
         </div>
       </div>
