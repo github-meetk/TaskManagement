@@ -39,7 +39,9 @@ const Profile = () => {
               {userData.firstName.charAt(0).toUpperCase()}
             </span>
           </div>
-          <h2 className="text-2xl font-semibold mb-2">{userData.firstName}</h2>
+          <h2 className="text-2xl font-semibold mb-2">
+            {userData.firstName} {userData.lastName}
+          </h2>
           <p className="text-gray-500 mb-2">{userData.email}</p>
           {token && (
             <button

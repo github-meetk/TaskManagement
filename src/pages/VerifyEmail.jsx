@@ -7,25 +7,25 @@ import toast from "react-hot-toast";
 const VerifyEmail = () => {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signupData } = useSelector((state) => state.auth);
+  const { userData } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      if (!signupData) {
+      if (!userData) {
         toast.error("No signup data found. Please sign up again.");
         navigate("/signup");
         return;
       }
 
       // Call the signup API with form data and OTP
-      await signupAPI({ ...signupData, otp });
-      toast.error("Signup successful! Please log in.");
+      await signupAPI({ ...userData, otp });
+      toast.success("Signup successful! Please log in.");
       navigate("/login");
     } catch (error) {
-      console.error(error.response?.data?.message || "Error during signup");
+      console.log(error);
       toast.error(error.response?.data?.message || "Failed to verify OTP");
     } finally {
       setLoading(false);
