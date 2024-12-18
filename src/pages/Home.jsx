@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToken, setUserData } from "../slices/authSlice";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { use } from "react";
 
 function Home() {
   const { token, userData } = useSelector((state) => state.auth);
@@ -100,10 +101,10 @@ function Home() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="container bg-gray-100 mx-auto p-6 rounded-lg">
-        <div className="flex flex-col md:flex-row justify-between p-4 mb-8 rounded-lg">
-          <div className="flex items-center gap-4 mb-4 md:mb-0">
-            <img src={logo} width={50} alt="logo" />
-            <h1 className="text-md font-bold text-center md:text-left sm:text-2xl md:text-2xl">
+        <div className="flex flex-row justify-between p-4 mb-8 rounded-lg">
+          <div className="flex items-center gap-4">
+            <img className="m-auto" src={logo} width={50} alt="logo" />
+            <h1 className="text-md hidden sm:block font-bold text-center md:text-left sm:text-2xl md:text-2xl">
               Task Management App
             </h1>
           </div>
@@ -111,26 +112,9 @@ function Home() {
             {token && (
               <button
                 onClick={() => navigate("/profile")}
-                className="m-2 flex items-center justify-center gap-3 p-1.5 px-4 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 text-white hover:from-blue-500 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-transform transform hover:scale-105"
+                className="m-2 flex border-2 border-white bg-white p-2.5 rounded-full items-center justify-center gap-3 text-black hover:border-2 hover:border-black  transition-transform transform hover:scale-105"
               >
-                <svg
-                  className="h-8 w-8"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <div className="text-lg font-semibold">
-                  {userData?.firstName}
-                </div>
+                <img src={userData.image} width={30} alt="Profile" />
               </button>
             )}
           </div>
