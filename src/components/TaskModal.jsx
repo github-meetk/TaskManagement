@@ -9,6 +9,7 @@ const TaskModal = ({
   onSubmit,
   onClose,
   action,
+  formErrors,
 }) => {
   if (!isOpen) return null;
 
@@ -27,14 +28,18 @@ const TaskModal = ({
           Title:
           <input
             type="text"
-            placeholder="Enter Name"
+            placeholder="Enter Title"
             value={formData.title}
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
             className="w-full p-2 border rounded"
           />
+          {formErrors.title && (
+            <div className="text-red-500 text-sm mt-1">{formErrors.title}</div>
+          )}
         </label>
+
         <label className="block mb-2">
           Description:
           <textarea
@@ -45,7 +50,13 @@ const TaskModal = ({
             }
             className="w-full p-2 border rounded"
           ></textarea>
+          {formErrors.description && (
+            <div className="text-red-500 text-sm mt-1">
+              {formErrors.description}
+            </div>
+          )}
         </label>
+
         <label className="block mb-2">
           Due Date:
           <input
@@ -56,7 +67,13 @@ const TaskModal = ({
             }
             className="w-full p-2 border rounded"
           />
+          {formErrors.dueDate && (
+            <div className="text-red-500 text-sm mt-1">
+              {formErrors.dueDate}
+            </div>
+          )}
         </label>
+
         <label className="block mb-4">
           Status:
           <select
@@ -71,6 +88,7 @@ const TaskModal = ({
             <option value="Completed">Completed</option>
           </select>
         </label>
+
         <div className="flex justify-end">
           <button
             onClick={() => onSubmit(taskData)}

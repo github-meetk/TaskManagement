@@ -11,7 +11,7 @@ import {
   createTaskAPI,
   updateTaskAPI,
 } from "../services/taskService";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
@@ -31,6 +31,7 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(1); // State for current page
   const [tasksPerPage] = useState(6); // Number of tasks per page
   const [loading, setLoading] = useState(true);
+  const [formErrors, setFormErrors] = useState({});
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -62,18 +63,32 @@ function Home() {
       status: "Pending",
     });
     setIsCreateModalOpen(true);
+    setFormErrors({});
   };
 
   const handleCreateTask = async () => {
-    await createTaskAPI(formData);
-    setIsCreateModalOpen(false);
-    fetchTasks();
+    if (validateForm()) {
+      await createTaskAPI(formData);
+      setIsCreateModalOpen(false);
+      fetchTasks();
+    }
   };
 
   const handleUpdateTask = async () => {
-    await updateTaskAPI(editTask._id, formData);
-    setEditTask(null);
-    fetchTasks();
+    if (validateForm()) {
+      await updateTaskAPI(editTask._id, formData);
+      setEditTask(null);
+      fetchTasks();
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.title) errors.title = "Title is required";
+    if (!formData.description) errors.description = "Description is required";
+    if (!formData.dueDate) errors.dueDate = "Due Date is required";
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const filteredTasks = tasks.filter((task) => {
@@ -274,36 +289,38 @@ function Home() {
             </button>
           </div>
         )}
+
+        {/* Create Task Modal */}
+        <TaskModal
+          isOpen={isCreateModalOpen}
+          taskData={null}
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleCreateTask}
+          onClose={() => setIsCreateModalOpen(false)}
+          action="create"
+          formErrors={formErrors}
+        />
+
+        {/* Edit Task Modal */}
+        <TaskModal
+          isOpen={editTask !== null}
+          taskData={editTask}
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleUpdateTask}
+          onClose={() => setEditTask(null)}
+          action="edit"
+          formErrors={formErrors}
+        />
+
+        {/* View Task Modal */}
+        <ViewTaskModal
+          isOpen={viewTask !== null}
+          taskData={viewTask}
+          onClose={() => setViewTask(null)}
+        />
       </div>
-
-      {/* Create Task Modal */}
-      <TaskModal
-        isOpen={isCreateModalOpen}
-        taskData={null}
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={handleCreateTask}
-        onClose={() => setIsCreateModalOpen(false)}
-        action="create"
-      />
-
-      {/* Edit Task Modal */}
-      <TaskModal
-        isOpen={editTask !== null}
-        taskData={editTask}
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={handleUpdateTask}
-        onClose={() => setEditTask(null)}
-        action="edit"
-      />
-
-      {/* View Task Modal */}
-      <ViewTaskModal
-        isOpen={viewTask !== null}
-        taskData={viewTask}
-        onClose={() => setViewTask(null)}
-      />
     </div>
   );
 }
