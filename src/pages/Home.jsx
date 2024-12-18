@@ -13,6 +13,7 @@ import {
 } from "../services/taskService";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Home() {
   const { token, userData } = useSelector((state) => state.auth);
@@ -42,7 +43,13 @@ function Home() {
   };
 
   const deleteTask = async (taskId) => {
-    await deleteTaskAPI(taskId);
+    try {
+      await deleteTaskAPI(taskId);
+      toast.success("Deleted the Tsak!!");
+    } catch {
+      toast.error("Could not delete the task.");
+    }
+
     fetchTasks();
   };
 
@@ -69,7 +76,12 @@ function Home() {
 
   const handleCreateTask = async () => {
     if (validateForm()) {
-      await createTaskAPI(formData);
+      try {
+        await createTaskAPI(formData);
+        toast.success("New Task Created!!");
+      } catch {
+        toast.error("Could not create the Task.");
+      }
       setIsCreateModalOpen(false);
       fetchTasks();
     }
@@ -77,7 +89,12 @@ function Home() {
 
   const handleUpdateTask = async () => {
     if (validateForm()) {
-      await updateTaskAPI(editTask._id, formData);
+      try {
+        await updateTaskAPI(editTask._id, formData);
+        toast.success("Updated the task!!");
+      } catch {
+        toast.error("Could not update the task.");
+      }
       setEditTask(null);
       fetchTasks();
     }
