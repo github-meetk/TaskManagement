@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
-import { MdRemoveRedEye, MdEdit, MdDelete } from "react-icons/md";
+import { MdRemoveRedEye } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import TaskModal from "../components/TaskModal";
-import ViewTaskModal from "../components/ViewTaskModal";
+import ViewTaskModal from "../components/ViewTaskModal"; // Import the new ViewTaskModal
 import {
   getTasksAPI,
   deleteTaskAPI,
@@ -25,12 +27,12 @@ function Home() {
     status: "Pending",
   });
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All"); // New state for filtering by status
-  const [currentPage, setCurrentPage] = useState(1);
-  const [tasksPerPage] = useState(6);
+  const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
+  const [currentPage, setCurrentPage] = useState(1); // State for current page
+  const [tasksPerPage] = useState(6); // Number of tasks per page
   const [loading, setLoading] = useState(true);
   const [formErrors, setFormErrors] = useState({});
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const fetchTasks = async () => {
     setLoading(true);
@@ -90,7 +92,6 @@ function Home() {
     return Object.keys(errors).length === 0;
   };
 
-  // Filter tasks by search query and status
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =
       task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -155,7 +156,7 @@ function Home() {
         </div>
 
         {/* Status Filter */}
-        <div className="mb-4 flex items-center gap-4 justify-end">
+        <div className="mb-4 flex justify-end items-center gap-4">
           <label className="text-sm font-semibold">Filter by Status:</label>
           <select
             value={statusFilter}
@@ -308,33 +309,38 @@ function Home() {
             </button>
           </div>
         )}
+
+        {/* Create Task Modal */}
+        <TaskModal
+          isOpen={isCreateModalOpen}
+          taskData={null}
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleCreateTask}
+          onClose={() => setIsCreateModalOpen(false)}
+          action="create"
+          formErrors={formErrors}
+        />
+
+        {/* Edit Task Modal */}
+        <TaskModal
+          isOpen={editTask !== null}
+          taskData={editTask}
+          formData={formData}
+          setFormData={setFormData}
+          onSubmit={handleUpdateTask}
+          onClose={() => setEditTask(null)}
+          action="edit"
+          formErrors={formErrors}
+        />
+
+        {/* View Task Modal */}
+        <ViewTaskModal
+          isOpen={viewTask !== null}
+          taskData={viewTask}
+          onClose={() => setViewTask(null)}
+        />
       </div>
-
-      {/* Create Task Modal */}
-      {isCreateModalOpen && (
-        <TaskModal
-          formData={formData}
-          setFormData={setFormData}
-          handleCreateTask={handleCreateTask}
-          formErrors={formErrors}
-          setIsCreateModalOpen={setIsCreateModalOpen}
-        />
-      )}
-
-      {/* Edit Task Modal */}
-      {editTask && (
-        <TaskModal
-          formData={formData}
-          setFormData={setFormData}
-          handleUpdateTask={handleUpdateTask}
-          formErrors={formErrors}
-          setIsCreateModalOpen={setIsCreateModalOpen}
-          isEdit={true}
-        />
-      )}
-
-      {/* View Task Modal */}
-      {viewTask && <ViewTaskModal task={viewTask} setViewTask={setViewTask} />}
     </div>
   );
 }
