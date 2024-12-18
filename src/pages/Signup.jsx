@@ -17,18 +17,15 @@ const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Input change handler
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      // Send OTP to email
       await sendotpAPI({ email: formData.email });
       dispatch(setUserData(formData));
       navigate("/verify-email");

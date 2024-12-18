@@ -4,7 +4,7 @@ import { MdRemoveRedEye } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import TaskModal from "../components/TaskModal";
-import ViewTaskModal from "../components/ViewTaskModal"; // Import the new ViewTaskModal
+import ViewTaskModal from "../components/ViewTaskModal";
 import {
   getTasksAPI,
   deleteTaskAPI,
@@ -28,9 +28,9 @@ function Home() {
     status: "Pending",
   });
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
-  const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const [tasksPerPage] = useState(6); // Number of tasks per page
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [tasksPerPage] = useState(6);
   const [loading, setLoading] = useState(true);
   const [formErrors, setFormErrors] = useState({});
   const [statusFilter, setStatusFilter] = useState("All");
@@ -155,7 +155,6 @@ function Home() {
           </div>
         </div>
 
-        {/* Search Bar */}
         <div className="w-full flex justify-between gap-2 mb-6">
           <input
             type="text"
@@ -172,7 +171,6 @@ function Home() {
           </button>
         </div>
 
-        {/* Status Filter */}
         <div className="mb-4 flex justify-end items-center gap-4">
           <label className="text-sm font-semibold">Filter by Status:</label>
           <select
@@ -226,18 +224,17 @@ function Home() {
                       </p>
                     </div>
 
-                    {/* Buttons */}
                     <div className="flex justify-between mt-4 space-x-4">
                       <div className="flex space-x-4">
                         <button
-                          onClick={() => setViewTask(task)} // View Task
+                          onClick={() => setViewTask(task)}
                           className="flex gap-2 items-center bg-gray-100 text-black px-4 py-2 rounded-md hover:bg-gray-200 transition duration-200"
                         >
                           <MdRemoveRedEye size={20} />
                           View
                         </button>
                         <button
-                          onClick={() => openEditModal(task)} // Edit Task
+                          onClick={() => openEditModal(task)}
                           className="flex gap-2 items-center bg-gray-100 text-black px-4 py-2 rounded-md hover:bg-gray-200 transition duration-200"
                         >
                           <MdEdit size={20} />
@@ -245,7 +242,7 @@ function Home() {
                         </button>
                       </div>
                       <button
-                        onClick={() => deleteTask(task._id)} // Delete Task
+                        onClick={() => deleteTask(task._id)}
                         className="bg-white border-2 border-black-600 px-2 py-2 rounded-md hover:border-red-600 transition duration-200"
                       >
                         <MdDelete color="red" size={20} />
@@ -258,7 +255,6 @@ function Home() {
           </div>
         )}
 
-        {/* Pagination Controls */}
         {currentTasks.length !== 0 && !loading && (
           <div
             className="flex justify-between items-center gap-x-1 mt-6"
@@ -327,7 +323,6 @@ function Home() {
           </div>
         )}
 
-        {/* Create Task Modal */}
         <TaskModal
           isOpen={isCreateModalOpen}
           taskData={null}
@@ -339,7 +334,6 @@ function Home() {
           formErrors={formErrors}
         />
 
-        {/* Edit Task Modal */}
         <TaskModal
           isOpen={editTask !== null}
           taskData={editTask}
@@ -351,7 +345,6 @@ function Home() {
           formErrors={formErrors}
         />
 
-        {/* View Task Modal */}
         <ViewTaskModal
           isOpen={viewTask !== null}
           taskData={viewTask}

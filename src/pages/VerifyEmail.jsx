@@ -20,7 +20,6 @@ const VerifyEmail = () => {
         return;
       }
 
-      // Call the signup API with form data and OTP
       await signupAPI({ ...userData, otp });
       toast.success("Signup successful! Please log in.");
       navigate("/login");
