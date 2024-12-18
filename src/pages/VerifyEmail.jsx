@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signupAPI } from "../services/taskService";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const VerifyEmail = () => {
   const [otp, setOtp] = useState("");
@@ -14,18 +15,18 @@ const VerifyEmail = () => {
     try {
       setLoading(true);
       if (!signupData) {
-        alert("No signup data found. Please sign up again.");
+        toast.error("No signup data found. Please sign up again.");
         navigate("/signup");
         return;
       }
 
       // Call the signup API with form data and OTP
       await signupAPI({ ...signupData, otp });
-      alert("Signup successful! Please log in.");
+      toast.error("Signup successful! Please log in.");
       navigate("/login");
     } catch (error) {
       console.error(error.response?.data?.message || "Error during signup");
-      alert(error.response?.data?.message || "Failed to verify OTP");
+      toast.error(error.response?.data?.message || "Failed to verify OTP");
     } finally {
       setLoading(false);
     }

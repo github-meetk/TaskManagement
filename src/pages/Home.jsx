@@ -11,8 +11,15 @@ import {
   createTaskAPI,
   updateTaskAPI,
 } from "../services/taskService";
+import { useDispatch, useSelector } from "react-redux";
+import { setToken, setUserData } from "../slices/authSlice";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const { token, userData } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [editTask, setEditTask] = useState(null);
   const [viewTask, setViewTask] = useState(null);
@@ -100,23 +107,50 @@ function Home() {
               Task Management App
             </h1>
           </div>
-          <button
-            onClick={openCreateModal}
-            className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition duration-200 w-full md:w-auto"
-          >
-            Create Task
-          </button>
+          <div className="flex gap-2">
+            {token && (
+              <button
+                onClick={() => navigate("/profile")}
+                className="m-2 flex items-center justify-center gap-3 p-1.5 px-4 rounded-full bg-gradient-to-r from-blue-400 to-blue-600 text-white hover:from-blue-500 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-transform transform hover:scale-105"
+              >
+                <svg
+                  className="h-8 w-8"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <div className="text-lg font-semibold">
+                  {userData?.firstName}
+                </div>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Search Bar */}
-        <div className="mb-6">
+        <div className="w-full flex justify-between gap-2 mb-6">
           <input
             type="text"
             placeholder="Search by title or description"
-            className="w-full p-2 border border-gray-300 rounded-lg"
+            className="w-5/6 p-2 border border-gray-300 rounded-lg"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          <button
+            onClick={openCreateModal}
+            className="w-1/6 bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition duration-200 w-auto md:w-auto"
+          >
+            Create Task
+          </button>
         </div>
 
         {/* Task List */}

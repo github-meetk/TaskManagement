@@ -20,7 +20,7 @@ export const deleteTaskAPI = async (taskId) => {
 };
 
 export const loginAPI = async (data) => {
-  await axios.post(`${API_URL_AUTH}/login`, data);
+  return await axios.post(`${API_URL_AUTH}/login`, data);
 };
 
 export const signupAPI = async (data) => {

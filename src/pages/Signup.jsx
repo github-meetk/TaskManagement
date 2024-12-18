@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendotpAPI } from "../services/taskService";
 import { useDispatch } from "react-redux";
-import { setSignupData } from "../slices/authSlice";
+import { setUserData } from "../slices/authSlice";
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -29,11 +30,11 @@ const Signup = () => {
       setLoading(true);
       // Send OTP to email
       await sendotpAPI({ email: formData.email });
-      dispatch(setSignupData(formData));
+      dispatch(setUserData(formData));
       navigate("/verify-email");
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Failed to send OTP");
+      toast.error(error.response?.data?.message || "Failed to send OTP");
     } finally {
       setLoading(false);
     }

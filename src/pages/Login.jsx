@@ -1,23 +1,32 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginAPI } from "../services/taskService";
+import { useDispatch } from "react-redux";
+import { setToken, setUserData } from "../slices/authSlice";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
       const response = await loginAPI({ email, password });
-      alert("Login successful!");
+      console.log(response);
+      toast.success("Login successful!");
+      dispatch(setToken(response.data.token));
+      dispatch(setUserData(response.data.user));
+      localStorage.setItem("token", JSON.stringify(response.data.token));
+      localStorage.setItem("userData", JSON.stringify(response.data.user));
       navigate("/");
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Failed to login");
+      toast.error(error.response?.data?.message || "Failed to login");
     } finally {
       setLoading(false);
     }
