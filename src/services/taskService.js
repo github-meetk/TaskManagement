@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:4000/api/tasks";
-const API_URL_AUTH = "http://localhost:4000/api/auth";
+const API_URL = "https://taskmanagement-m1i8.onrender.com/api/tasks";
+const API_URL_AUTH = "https://taskmanagement-m1i8.onrender.com/api/auth";
 
 export const getTasksAPI = async () => {
   return await axios.get(API_URL);
