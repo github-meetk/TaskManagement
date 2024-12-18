@@ -12,14 +12,10 @@ import {
   updateTaskAPI,
 } from "../services/taskService";
 import { useDispatch, useSelector } from "react-redux";
-import { setToken, setUserData } from "../slices/authSlice";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { use } from "react";
 
 function Home() {
   const { token, userData } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [editTask, setEditTask] = useState(null);
@@ -34,10 +30,13 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
   const [currentPage, setCurrentPage] = useState(1); // State for current page
   const [tasksPerPage] = useState(6); // Number of tasks per page
+  const [loading, setLoading] = useState(true);
 
   const fetchTasks = async () => {
+    setLoading(true);
     const response = await getTasksAPI();
     setTasks(response.data);
+    setLoading(false);
   };
 
   const deleteTask = async (taskId) => {
@@ -136,71 +135,79 @@ function Home() {
             Create Task
           </button>
         </div>
-
-        {/* Task List */}
-        {currentTasks.length === 0 ? (
-          <div className="text-center text-lg text-gray-500">
-            No Tasks Found!!
+        {loading ? (
+          <div className="flex flex-col items-center justify-center">
+            <div className="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full">
+              <div className="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full" />
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {currentTasks.map((task) => (
-              <div
-                key={task._id}
-                className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between"
-              >
-                <div>
-                  <h3 className="text-xl font-bold text-gray-700 mb-2">
-                    {task.title}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Due Date: {new Date(task.dueDate).toLocaleDateString()}
-                  </p>
-                  <p
-                    className={`text-sm mt-2 ${
-                      task.status === "Completed"
-                        ? "text-green-600"
-                        : task.status === "In Progress"
-                        ? "text-yellow-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    Status: {task.status}
-                  </p>
-                </div>
-
-                {/* Buttons */}
-                <div className="flex justify-between mt-4 space-x-4">
-                  <div className="flex space-x-4">
-                    <button
-                      onClick={() => setViewTask(task)} // View Task
-                      className="flex gap-2 items-center bg-gray-100 text-black px-4 py-2 rounded-md hover:bg-gray-200 transition duration-200"
-                    >
-                      <MdRemoveRedEye size={20} />
-                      View
-                    </button>
-                    <button
-                      onClick={() => openEditModal(task)} // Edit Task
-                      className="flex gap-2 items-center bg-gray-100 text-black px-4 py-2 rounded-md hover:bg-gray-200 transition duration-200"
-                    >
-                      <MdEdit size={20} />
-                      Edit
-                    </button>
-                  </div>
-                  <button
-                    onClick={() => deleteTask(task._id)} // Delete Task
-                    className="bg-white border-2 border-black-600 px-2 py-2 rounded-md hover:border-red-600 transition duration-200"
-                  >
-                    <MdDelete color="red" size={20} />
-                  </button>
-                </div>
+          <div>
+            {currentTasks.length === 0 ? (
+              <div className="text-center text-lg text-gray-500">
+                No Tasks Found!!
               </div>
-            ))}
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {currentTasks.map((task) => (
+                  <div
+                    key={task._id}
+                    className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between"
+                  >
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-700 mb-2">
+                        {task.title}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        Due Date: {new Date(task.dueDate).toLocaleDateString()}
+                      </p>
+                      <p
+                        className={`text-sm mt-2 ${
+                          task.status === "Completed"
+                            ? "text-green-600"
+                            : task.status === "In Progress"
+                            ? "text-yellow-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        Status: {task.status}
+                      </p>
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="flex justify-between mt-4 space-x-4">
+                      <div className="flex space-x-4">
+                        <button
+                          onClick={() => setViewTask(task)} // View Task
+                          className="flex gap-2 items-center bg-gray-100 text-black px-4 py-2 rounded-md hover:bg-gray-200 transition duration-200"
+                        >
+                          <MdRemoveRedEye size={20} />
+                          View
+                        </button>
+                        <button
+                          onClick={() => openEditModal(task)} // Edit Task
+                          className="flex gap-2 items-center bg-gray-100 text-black px-4 py-2 rounded-md hover:bg-gray-200 transition duration-200"
+                        >
+                          <MdEdit size={20} />
+                          Edit
+                        </button>
+                      </div>
+                      <button
+                        onClick={() => deleteTask(task._id)} // Delete Task
+                        className="bg-white border-2 border-black-600 px-2 py-2 rounded-md hover:border-red-600 transition duration-200"
+                      >
+                        <MdDelete color="red" size={20} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {/* Pagination Controls */}
-        {currentTasks.length !== 0 && (
+        {currentTasks.length !== 0 && !loading && (
           <div
             className="flex justify-between items-center gap-x-1 mt-6"
             aria-label="Pagination"
