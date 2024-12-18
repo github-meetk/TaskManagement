@@ -23,6 +23,12 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.error("MongoDB connection error:", error));
 
+app.get("/", (req, res) => {
+  return res.json({
+    success: true,
+    message: "Your server is up and running....",
+  });
+});
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
